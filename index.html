@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock, paper, scissors</title>
+</head>
+
+<body>
+
+    <script>
+        console.log("First Project!");
+
+        //Function to get computer choice
+        function getComputerChoice() {
+            let wholeNum = Math.floor(Math.random() * 3) + 1;
+            if (wholeNum === 1) {
+                return "Rock";
+            } else if (wholeNum === 2) {
+                return "Paper"
+            } else {
+                return "Scissors"
+            }
+        }
+
+        //function to get the human choice
+        function getHumanChoice() {
+            let choice = prompt("Choose between Rock, Paper, Scissors: ").toLowerCase().trim();
+            if (choice === "rock") {
+                return "Rock"
+            } else if (choice === "paper") {
+                return "Paper"
+            } else if (choice === "scissors") {
+                return "Scissors"
+            } else {
+                return "You entered something else"
+            }
+        }
+        //function to play a single round
+
+        function playGame() {
+            let humanScore = 0;
+            let computerScore = 0;
+            function playRound(humanChoice, computerChoice) {
+                if (humanChoice === computerChoice) {
+                    console.log("It's a tie!")
+                } else if (
+                    (humanChoice === "Rock" && computerChoice === "Scissors") || (humanChoice === "Paper" && computerChoice === "Rock") || (humanChoice === "Scissors" && computerChoice === "Paper")
+                ) {
+                    console.log(`You won! ${humanChoice} beats ${computerChoice}`);
+                    humanScore++;
+                } else {
+                    console.log(`You lost:( ${computerChoice} beats ${humanChoice} `)
+                    computerScore++;
+                }
+            }
+
+            const humanSelection = getHumanChoice();
+            const computerSelection = getComputerChoice();
+            
+            playRound(humanSelection, computerSelection);
+            playRound(humanSelection, computerSelection);
+            playRound(humanSelection, computerSelection);
+            playRound(humanSelection, computerSelection);
+            playRound(humanSelection, computerSelection);
+
+
+            console.log(`the total score for the human is ${humanScore} and the computer is ${computerScore}`);
+
+        }
+
+        playGame();
+
+
+    </script>
+
+</body>
+
+</html>
