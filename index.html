@@ -8,77 +8,82 @@
 </head>
 
 <body>
+    <div id="container">
+        <h1>Rock Paper Scissors</h1>
+        <div class="choice">
+            <button>Rock</button>
+            <button>Paper</button>
+            <button>Scissors</button>
+        </div>
+        <div id="result"></div>
+        <div id="score">Human: 0 | Computer: 0</div>
+        <button class="restart-btn">Restart</button>
+    </div>
 
     <script>
-        console.log("First Project!");
+        const buttons = document.querySelectorAll('.choice button');
+        const restartButton = document.querySelector('.restart-btn');
+        const resultDiv = document.getElementById('result');
+        const scoreDiv = document.getElementById('score');
+        const container = document.getElementById('container')
+        let humanScore = 0;
+        let computerScore = 0;
+        let rounds = 0;
+
+
+
 
         //Function to get computer choice
         function getComputerChoice() {
-            let wholeNum = Math.floor(Math.random() * 3) + 1;
-            if (wholeNum === 1) {
-                return "Rock";
-            } else if (wholeNum === 2) {
-                return "Paper"
+            const choices = ['Rock', 'Paper', 'Scissors']
+            return choices[Math.floor(Math.random() * choices.length)]
+        }
+
+        function playRound(humanChoice, computerChoice) {
+            if (humanChoice === computerChoice) {
+                resultDiv.textContent = "It's a tie!";
+            } else if (
+                (humanChoice === "Rock" && computerChoice === "Scissors") || (humanChoice === "Paper" && computerChoice === "Rock") || (humanChoice === "Scissors" && computerChoice === "Paper")
+            ) {
+                resultDiv.textContent = `You won! ${humanChoice} beats ${computerChoice}`;
+                humanScore++;
             } else {
-                return "Scissors"
+                resultDiv.textContent = `You lost. ${computerChoice} beats ${humanChoice} `
+                computerScore++;
             }
+            scoreDiv.textContent = `Human: ${humanScore} | Computer: ${computerScore}`
         }
 
-        //function to get the human choice
-        function getHumanChoice() {
-            let choice = prompt("Choose between Rock, Paper, Scissors: ").toLowerCase().trim();
-            if (choice === "rock") {
-                return "Rock"
-            } else if (choice === "paper") {
-                return "Paper"
-            } else if (choice === "scissors") {
-                return "Scissors"
-            } else {
-                return "You entered something else"
-            }
+        function restart() {
+            humanScore = 0;
+            computerScore = 0;
+            rounds = 0;
+            resultDiv.textContent = "";
+            scoreDiv.textContent = `Human: ${humanScore} | Computer: ${computerScore}`;
+            buttons.forEach(b => b.disabled = false);
+            // remove any appended "Game over" messages
+            container.querySelectorAll('p').forEach(p => {
+                if (p.textContent.trim() === 'Game over') p.remove();
+            });
         }
 
-        //function to play game
-        function playGame() {
-            let humanScore = 0;
-            let computerScore = 0;
-
-            function playRound(humanChoice, computerChoice) {
-                if (humanChoice === computerChoice) {
-                    console.log("It's a tie!")
-                } else if (
-                    (humanChoice === "Rock" && computerChoice === "Scissors") || (humanChoice === "Paper" && computerChoice === "Rock") || (humanChoice === "Scissors" && computerChoice === "Paper")
-                ) {
-                    console.log(`You won! ${humanChoice} beats ${computerChoice}`);
-                    humanScore++;
-                } else {
-                    console.log(`You lost. ${computerChoice} beats ${humanChoice} `)
-                    computerScore++;
-                }
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+            if (rounds > 5) return;
+            const humanChoice = button.textContent;
+            const computerChoice = getComputerChoice();
+            playRound(humanChoice, computerChoice);
+            rounds++;
+            if (rounds > 5) {
+                const text = document.createElement('p');
+                text.textContent = 'Game over';
+                container.appendChild(text);
+                buttons.forEach(b => b.disabled = true);
             }
+            });
+        });
 
-            let humanSelection = getHumanChoice();
-            let computerSelection = getComputerChoice();
-            playRound(humanSelection, computerSelection)
-
-            humanSelection = getHumanChoice();
-            computerSelection = getComputerChoice();
-            playRound(humanSelection, computerSelection);
-
-            humanSelection = getHumanChoice();
-            computerSelection = getComputerChoice();
-            playRound(humanSelection, computerSelection);
-
-            humanSelection = getHumanChoice();
-            computerSelection = getComputerChoice();
-            playRound(humanSelection, computerSelection);
-
-            humanSelection = getHumanChoice();
-            computerSelection = getComputerChoice();
-            playRound(humanSelection, computerSelection);
-        }
-
-        playGame();
+        restartButton.addEventListener('click', restart)
 
 
     </script>
